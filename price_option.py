@@ -23,6 +23,7 @@ def N(x):
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("data_file", type=argparse.FileType(), help="Data file (CSV)")
+    # TODO maybe this should be 1.03
     parser.add_argument("-r", type=float, help="Risk free return (default 0.03)", default=0.03)
     parser.add_argument("--strike", "-k", type=float, help="Strike price (default = price at emission time)")
     parser.add_argument("--plot", "-p", help="Plot to file instead of showing the plot.")
@@ -36,6 +37,40 @@ def date(row):
     """
     return datetime.datetime.strptime(row['Date'], '%Y-%m-%d').date()
 
+
+def price_call_option(historical_data, K, r, T):
+    """
+    Returns the call option price calculated using historical data.
+    The option is set to expire in T years, have a strike price of K. The risk
+    free rate is r.
+    """
+    # Use last open as spot price
+    S = float(historical_data[-1]['Open'])
+    volatility = statistics.stdev(float(d['Open']) for d in historical_data)
+
+    d1 = log(S / K) + 0.5 * volatility ** 2 * (T) / (volatility * sqrt(T))
+    d2 = d1 - volatility * sqrt(T)
+
+    # Price for a call option
+    C = S * N(d1) - K * exp(-r * T) * N(d2)
+
+    return C
+
+def separate_historical_and_testing(data):
+    """
+    Cut the given data in half the first half for estimation and the second for
+    testing.
+    """
+    start_date = date(data[0])
+    stop_date = date(data[-1])
+
+    write_time = start_date + (stop_date - start_date) / 2
+
+    estimation_data = [d for d in data if date(d) < write_time]
+    future_data = [d for d in data if date(d) >= write_time]
+
+    return estimation_data, future_data
+
 def main():
     args = parse_args()
 
@@ -44,19 +79,13 @@ def main():
     # Make sure data are sorted in ascending order
     data.sort(key=lambda s: s['Date'])
 
-    start_date = date(data[0])
-    stop_date = date(data[-1])
-
-    write_time = start_date + (stop_date - start_date) / 2
-
     # Extracts data used for volatility estimation
-    estimation_data = [d for d in data if date(d) < write_time]
-    future_data = [d for d in data if date(d) >= write_time]
+    estimation_data, future_data = separate_historical_and_testing(data)
 
     # Compute black schole pricing
     # TODO Is open the good estimator ?
     volatility = statistics.stdev(float(d['Open']) for d in estimation_data)
-    S = float(estimation_data[-1]['Open'])
+
     r = args.r
 
     if args.strike:
@@ -65,21 +94,19 @@ def main():
         K = S
 
     # Compute the time interval in years (T - t in the book)
+    write_time = date(estimation_data[-1])
+    stop_date = date(future_data[-1])
+
+    # Compute exercise time in year
     T = (stop_date - write_time).days / 365
 
-    d1 = log(S / K) + 0.5 * volatility ** 2 * (T) / (volatility * sqrt(T))
-    d2 = d1 - volatility * sqrt(T)
+    C = price_call_option(estimation_data, K, r, T)
 
-    # Price for a call option
-    C = S * N(d1) - K * exp(-r * T) * N(d2)
-    print(d1, d2)
-
-    print("Got {} data points from {} to {}".format(len(data), start_date, stop_date))
     print("Computing option price on {} for an exercise in {:.1f} years".format(write_time, T))
     print("Volatility σ = {:.2f}".format(volatility))
-    print("Current price S = {:.1f}".format(S))
     print("Strike price K = {:.1f}".format(K))
     print("Call price = {:.1f}".format(C))
+    print("Risk free rate: {:.2f}".format(r))
 
     # Plot a few things
     x  = [date(d) for d in data]
