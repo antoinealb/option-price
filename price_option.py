@@ -24,7 +24,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("data_file", type=argparse.FileType(), help="Data file (CSV)")
     # TODO maybe this should be 1.03
-    parser.add_argument("-r", type=float, help="Risk free return (default 0.03)", default=0.03)
+    parser.add_argument("-r", type=float, help="Risk free return (default 1.03)", default=1.03)
     parser.add_argument("--strike", "-k", type=float, help="Strike price (default = price at emission time)")
     parser.add_argument("--plot", "-p", help="Plot to file instead of showing the plot.")
 
