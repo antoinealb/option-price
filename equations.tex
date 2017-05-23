@@ -1,0 +1,51 @@
+% In preamble
+\renewcommand{\O}{\mathcal{O}}
+\newcommand{\W}{\mathcal{W}}
+\newcommand{\Piit}{\mathit{\Pi}}
+
+\usepackage{physics}
+
+S(t) := \text{Underlying asset price} \\
+T := \text{Exercise date} \\
+\mathcal{C}(S, T) := \text{Payoff of a call option for asset S at time T} \\
+\mathcal{P}(S, T) := \text{Payoff of a put option for asset S at time T} \\
+\mathcal{O}(t) := \text{Option price} \\
+P(S, t) := \text{Underlying asset price} \\
+
+% Eqn 5.5
+\dd{S} = \mu S(t) \dd{t} + \sigma S(t) \dd{W(t)}
+
+% Eqn 5.15
+\begin{eqnarray*}
+\W(t)               & = & \text{Wealth possessed by the writer at time $t$.} \\
+\Delta(t)           & = & \text{Fraction of the underlying kept as safety.}\\
+\mathit{\Pi(t)}     & = & \text{Cash amount kept as safety at time t.}\\
+\W (t)              & = & \Delta (t)S(t) + \mathit{\Pi (t)} = \O(t)
+\end{eqnarray*}
+
+% Eqn 5.14
+Itô process:
+\begin{eqnarray*}
+\dd{\O} & = & \left( \pdv{\O}{t} + \mu S(t) \pdv{\O}{S} + \frac{1}{2} \left( \sigma S(t) \right)^2 \pdv[2]{\O}{S} \right) \dd{t} + \sigma S(t) \pdv{O}{S}\dd{W(t)} \\
+& = & \left( \pdv{O}{t} + \frac{1}{2}\left( \sigma S(t) \right)^2 \pdv[2]{\O}{S} \right) \dd{t} + \pdv{\O}{S}\dd{S}
+\end{eqnarray*}
+
+% Eqn 5.17
+Delta hedging:
+\begin{equation*}
+    \dd{\O} = \Delta (t) \dd{S} + \dd{\Piit} = \Delta(t)\dd{S} + r\Piit \dd{t}
+\end{equation*}
+
+% Eqn 5.18
+Therefore:
+\begin{eqnarray*}
+    \Delta(t) &=& \pdv{\O}{S} \\
+    r\Piit    &=& \pdv{\O}{t} + \frac{1}{2} \left( \sigma S(t) \right)^2 \pdv[2]{\O}{S}
+\end{eqnarray*}
+
+Finally:
+\begin{equation*}
+    \underbrace{\pdv{\O}{t} + \frac{1}{2} \left( \sigma S(t) \right)^2 \pdv[2]{\O}{S}}_{r \Piit} + \underbrace{r \pdv{\O}{S} S}_{r \Delta(t) S} - r \O = 0
+\end{equation*}
+
+
