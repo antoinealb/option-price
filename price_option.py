@@ -26,7 +26,7 @@ def volatility(data):
     Computes the volatility of returns.
     """
     data = list(data)
-    diff = [(t - y) / y for t, y in zip(data[:-1], data[1:])]
+    diff = [log(t / y) for t, y in zip(data[:-1], data[1:])]
     return statistics.stdev(diff) * sqrt(len(data))
 
 
@@ -36,7 +36,7 @@ def parse_args():
         "data_file", type=argparse.FileType(), help="Data file (CSV)")
     # TODO maybe this should be 1.03
     parser.add_argument(
-        "-r", type=float, help="Risk free return (default 1.03)", default=1.03)
+        "-r", type=float, help="Risk free return (default 0.03)", default=0.03)
     parser.add_argument(
         "--strike",
         "-k",

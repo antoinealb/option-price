@@ -14,7 +14,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('data_file', nargs='+', type=argparse.FileType())
     parser.add_argument(
-        "-r", type=float, help="Risk free return (default 1.03)", default=1.03)
+        "-r", type=float, help="Risk free return (default 0.03)", default=0.03)
     parser.add_argument(
         "--strike",
         "-k",
@@ -57,7 +57,7 @@ def main():
         # Compute buyer payoff
         Sf = float(testing_data[-1]['Open'])  # final price
 
-        # TODO: Is the payoff formula correct
+        # Compute how much someone buying this option would have earned
         buyer_payoff = max(0, Sf - K) - C
 
         payoffs.append((K, C, buyer_payoff))
@@ -65,7 +65,9 @@ def main():
         print("{}: buyer_payoff = {:.2f}".format(data_file.name, buyer_payoff))
 
     mean = statistics.mean(1 + (p / (C + K)) for (K, C, p) in payoffs)
-    print("Mean relative return: {}".format(mean))
+    print("Backtested over {} symbols".format(len(payoffs)))
+    print("Mean relative return: {:.2f} %".format((mean - 1) * 100))
+    print("Risk free investment would yield {:.2f} %".format(args.r * 100))
 
 
 if __name__ == '__main__':
