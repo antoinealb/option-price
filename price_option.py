@@ -19,6 +19,14 @@ def N(x):
     """
     return (1.0 + erf(x / sqrt(2.0))) / 2.0
 
+def volatility(data):
+    """
+    Computes the volatility of returns.
+    """
+    data = list(data)
+    diff = [(t - y) / y for t, y in zip(data[:-1], data[1:])]
+    return statistics.stdev(diff) * sqrt(len(data))
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -84,7 +92,9 @@ def main():
 
     # Compute black schole pricing
     # TODO Is open the good estimator ?
-    volatility = statistics.stdev(float(d['Open']) for d in estimation_data)
+    sigma = volatility(float(d['Open']) for d in estimation_data)
+
+    S = float(estimation_data[-1]['Open'])
 
     r = args.r
 
@@ -102,8 +112,9 @@ def main():
 
     C = price_call_option(estimation_data, K, r, T)
 
-    print("Computing option price on {} for an exercise in {:.1f} years".format(write_time, T))
-    print("Volatility σ = {:.2f}".format(volatility))
+    print("Computing option price on {} for an exercise in {:.1f} years".
+          format(write_time, T))
+    print("Volatility σ = {:.2f}".format(sigma))
     print("Strike price K = {:.1f}".format(K))
     print("Call price = {:.1f}".format(C))
     print("Risk free rate: {:.2f}".format(r))
