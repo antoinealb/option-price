@@ -141,6 +141,9 @@ def main():
     # Draw a line at the strike price
     plt.axhline(y=K, color='b', linestyle='dotted')
 
+    # Draw a line at the payoff line
+    plt.axhline(y=K + C, color='g', linestyle='dotted')
+
     plt.xlabel('Date')
     plt.ylabel('Price [$]')
     plt.title('Call price: {:.1f} $'.format(C))
