@@ -2,6 +2,7 @@ import unittest
 from price_option import volatility
 from math import sqrt
 
+
 class VolatilityTest(unittest.TestCase):
     def test_estimate(self):
         """

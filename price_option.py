@@ -13,11 +13,13 @@ import matplotlib.pyplot as plt
 
 DATE_FMT = '%Y-%m-%d'
 
+
 def N(x):
     """
     Cumulative distribution function for the standard normal distribution
     """
     return (1.0 + erf(x / sqrt(2.0))) / 2.0
+
 
 def volatility(data):
     """
@@ -30,11 +32,18 @@ def volatility(data):
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("data_file", type=argparse.FileType(), help="Data file (CSV)")
+    parser.add_argument(
+        "data_file", type=argparse.FileType(), help="Data file (CSV)")
     # TODO maybe this should be 1.03
-    parser.add_argument("-r", type=float, help="Risk free return (default 1.03)", default=1.03)
-    parser.add_argument("--strike", "-k", type=float, help="Strike price (default = price at emission time)")
-    parser.add_argument("--plot", "-p", help="Plot to file instead of showing the plot.")
+    parser.add_argument(
+        "-r", type=float, help="Risk free return (default 1.03)", default=1.03)
+    parser.add_argument(
+        "--strike",
+        "-k",
+        type=float,
+        help="Strike price (default = price at emission time)")
+    parser.add_argument(
+        "--plot", "-p", help="Plot to file instead of showing the plot.")
 
     return parser.parse_args()
 
@@ -80,6 +89,7 @@ def separate_historical_and_testing(data):
 
     return estimation_data, future_data
 
+
 def main():
     args = parse_args()
 
@@ -121,8 +131,8 @@ def main():
     print("Risk free rate: {:.2f}".format(r))
 
     # Plot a few things
-    x  = [date(d) for d in data]
-    y  = [float(d['Open']) for d in data]
+    x = [date(d) for d in data]
+    y = [float(d['Open']) for d in data]
     plt.plot(x, y)
 
     # Draw a line at write time time
@@ -134,13 +144,16 @@ def main():
     plt.xlabel('Date')
     plt.ylabel('Price [$]')
     plt.title('Call price: {:.1f} $'.format(C))
-    plt.legend(['Underlying', 'Option writing', 'Strike'])
-
+    plt.legend([
+        'Underlying', 'Emission', 'Strike price',
+        'Positive payoff for the buyer'
+    ])
 
     if args.plot:
         plt.savefig(args.plot)
     else:
         plt.show()
+
 
 if __name__ == '__main__':
     main()
