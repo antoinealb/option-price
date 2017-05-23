@@ -48,4 +48,38 @@ Finally:
     \underbrace{\pdv{\O}{t} + \frac{1}{2} \left( \sigma S(t) \right)^2 \pdv[2]{\O}{S}}_{r \Piit} + \underbrace{r \pdv{\O}{S} S}_{r \Delta(t) S} - r \O = 0
 \end{equation*}
 
+The portfolio has the value:
+\begin{equation*}
+    \mathit{\Pi}(t) &=& S(t) + \mathcal{P}(S,t) - \mathcal{C}(S,t) \\
+\end{equation*}
 
+At expiry, the options yield:
+\begin{eqnarray*}
+    \mathcal{C}(S,T) &=& \text{max}(S(T) - K,0) \\
+    \mathcal{P}(S,T) &=& \text{max}(K - S(T),0) \\
+\end{eqnarray*}
+
+So the payoff of the portfolio is:
+\begin{eqnarray*}
+    \text{if} \: S \geq K: \quad &S& + 0 - (S - K) = K \\
+    \text{if} \: S \leq K: \quad &S& + (K - S) - 0 = K \\
+\end{eqnarray*}
+
+Since the portfolio has a risk free profit, it's equivalent to the risk-free placement:
+\begin{equation*}
+    \mathit{\Pi(t)} = Ke^{-r(T-t)} \\
+\end{equation*}
+
+Otherwise there's arbitrage:
+\begin{eqnarray*}
+    \text{If $\mathit{\Pi}(t) = \epsilon Ke^{-r(T-t)}$ with $\epsilon \neq 1$}
+    \text{if} \: \mathit{\Pi(t)} < Ke^{-r(T-t)}: \\
+    K - \mathit{\Pi(t)}e^{r(T-t)} &=& K - (\epsilon Ke^{-r(T-t)})e^{r(T-t)} \\
+                                  &=& K(1-\epsilon) \quad (\epsilon < 1)\\
+    \text{if} \: \mathit{\Pi(t)} > Ke^{-r(T-t)}: \\
+    \mathit{\Pi}(t) - Ke^{-r(T-t)} &=& (\epsilon - 1)Ke^{-r(T-t)} \quad (\epsilon > 1) \\
+\end{eqnarray*}
+
+\begin{equation*}
+    \mathcal{P}(S,t) = \mathcal{C}(S,t) - S(t) + Ke^{-r(T-t)}
+\end{equation*}
