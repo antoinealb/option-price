@@ -10,6 +10,7 @@ import statistics
 import datetime
 from math import *
 import matplotlib.pyplot as plt
+import os.path
 
 DATE_FMT = '%Y-%m-%d'
 
@@ -144,12 +145,14 @@ def main():
     # Draw a line at the payoff line
     plt.axhline(y=K + C, color='g', linestyle='dotted')
 
+    underlying_symbol = os.path.splitext(os.path.basename(args.data_file.name))[0]
+
     plt.xlabel('Date')
     plt.ylabel('Price [$]')
     plt.title('Call price: {:.1f} $'.format(C))
     plt.legend([
-        'Underlying', 'Emission', 'Strike price',
-        'Positive payoff for the buyer'
+        'Underlying ({})'.format(underlying_symbol),
+        'Emission', 'Strike price', 'Payoff = 0'
     ])
 
     if args.plot:
