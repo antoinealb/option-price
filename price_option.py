@@ -54,15 +54,16 @@ def price_call_option(historical_data, K, r, T):
     """
     # Use last open as spot price
     S = float(historical_data[-1]['Open'])
-    volatility = statistics.stdev(float(d['Open']) for d in historical_data)
+    sigma = volatility(float(d['Open']) for d in historical_data)
 
-    d1 = log(S / K) + 0.5 * volatility ** 2 * (T) / (volatility * sqrt(T))
-    d2 = d1 - volatility * sqrt(T)
+    d1 = (log(S / K) + (r + 0.5 * sigma * sigma) * T) / (sigma * sqrt(T))
+    d2 = d1 - sigma * sqrt(T)
 
     # Price for a call option
     C = S * N(d1) - K * exp(-r * T) * N(d2)
 
     return C
+
 
 def separate_historical_and_testing(data):
     """
