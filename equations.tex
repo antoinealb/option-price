@@ -19,8 +19,7 @@ T &:=& \text{Exercise date} \\
 r &:=& \text{Risk free interest rate} \\
 \mathcal{C}(S, T) &:=& \text{Payoff of a call option for asset S at time T} \\
 \mathcal{P}(S, T) &:=& \text{Payoff of a put option for asset S at time T} \\
-\mathcal{O}(t) &:=& \text{Option price} \\
-P(S, t) &:=& \text{Underlying asset price} \\
+\mathcal{O}(S, t) &:=& \text{Option price} \\
 \end{eqnarray*}
 
 % Itô rule of calculus
@@ -111,12 +110,12 @@ Suppose $\mathit{\Pi}(t) = \epsilon Ke^{-r(T-t)}$ with $\epsilon \neq 1$ (arbitr
 \begin{eqnarray*}
     t = T:& \mathcal{C}(S, T) &= max\left(S(T) - K, 0 \right) \\
     S = 0:& \mathcal{C}(0, t) &= 0 \\
-    S \xrightarrow{} \infty :& \mathcal{C}(S, t) &\xrightarrow{} 0
+    S \xrightarrow{} \infty :& \mathcal{C}(S, t) & \sim S
 \end{eqnarray*}
 
 
 \begin{eqnarray*}
-    C(S, t) &=& S N(d_1) - K e^{-r\left( T-t \right)} N(d_2) \\
+    \mathcal{C}(S, t) &=& S N(d_1) - K e^{-r\left( T-t \right)} N(d_2) \\
     d_1 &=& \frac{\ln \frac{S}{K} + \left( r + \frac{\sigma^2}{2} \right) \left( T - t \right)}{\sigma \sqrt{T - t}} \\
     d_2 &=& d_1 - \sigma \sqrt{T - t} \\
 \end{eqnarray*}
