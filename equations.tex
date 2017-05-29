@@ -5,22 +5,46 @@
 
 \usepackage{physics}
 
-S(t) := \text{Underlying asset price} \\
-T := \text{Exercise date} \\
-\mathcal{C}(S, T) := \text{Payoff of a call option for asset S at time T} \\
-\mathcal{P}(S, T) := \text{Payoff of a put option for asset S at time T} \\
-\mathcal{O}(t) := \text{Option price} \\
-P(S, t) := \text{Underlying asset price} \\
+% Equation 5.5
+\begin{equation*}
+    \dd{S} = \mu S(t) \dd{t} + \sigma S(t) \dd{W(t)
+\end{equation*}
+
+\sigma is the volatility of the asset. \\
+\mu is the drift.
+
+\begin{eqnarray*}
+S(t) &:=& \text{Underlying asset price} \\
+T &:=& \text{Exercise date} \\
+r &:=& \text{Risk free interest rate} \\
+\mathcal{C}(S, T) &:=& \text{Payoff of a call option for asset S at time T} \\
+\mathcal{P}(S, T) &:=& \text{Payoff of a put option for asset S at time T} \\
+\mathcal{O}(t) &:=& \text{Option price} \\
+P(S, t) &:=& \text{Underlying asset price} \\
+\end{eqnarray*}
+
+% Itô rule of calculus
+Given an Itô process
+
+\begin{equation*}
+    \dd{S} = a(S, t) \dd{t} + b(S, t)\dd{W(t)}
+\end{equation*}
+
+and a function $f(S, t)$, we have
+
+\begin{equation*}
+    \dd{f(S, t)} = \left( \pdv{f}{t} + a(S, t)\pdv{f}{S} + \frac{1}{2} b(S, t)^2 \pdv[2]{f}{S} \right) \dd{t} + b(S, t) \pdv{f}{S} \dd{W(t)}
+\end{equation*}
 
 % Eqn 5.5
 \dd{S} = \mu S(t) \dd{t} + \sigma S(t) \dd{W(t)}
 
 % Eqn 5.15
 \begin{eqnarray*}
-\W(t)               & = & \text{Wealth possessed by the writer at time $t$.} \\
 \Delta(t)           & = & \text{Fraction of the underlying kept as safety.}\\
 \mathit{\Pi(t)}     & = & \text{Cash amount kept as safety at time t.}\\
-\W (t)              & = & \Delta (t)S(t) + \mathit{\Pi (t)} = \O(t)
+\W(t)               & = & \text{Wealth possessed by the writer at time $t$.} \\
+                    & = & \Delta (t)S(t) + \mathit{\Pi (t)} = \O(t)
 \end{eqnarray*}
 
 % Eqn 5.14
@@ -65,21 +89,34 @@ So the payoff of the portfolio is:
     \text{if} \: S \leq K: \quad &S& + (K - S) - 0 = K \\
 \end{eqnarray*}
 
-Since the portfolio has a risk free profit, it's equivalent to the risk-free placement:
+The portfolio is risk free, therefore:
 \begin{equation*}
     \mathit{\Pi(t)} = Ke^{-r(T-t)} \\
 \end{equation*}
 
-Otherwise there's arbitrage:
-\begin{eqnarray*}
-    \text{If $\mathit{\Pi}(t) = \epsilon Ke^{-r(T-t)}$ with $\epsilon \neq 1$}
-    \text{if} \: \mathit{\Pi(t)} < Ke^{-r(T-t)}: \\
-    K - \mathit{\Pi(t)}e^{r(T-t)} &=& K - (\epsilon Ke^{-r(T-t)})e^{r(T-t)} \\
-                                  &=& K(1-\epsilon) \quad (\epsilon < 1)\\
-    \text{if} \: \mathit{\Pi(t)} > Ke^{-r(T-t)}: \\
-    \mathit{\Pi}(t) - Ke^{-r(T-t)} &=& (\epsilon - 1)Ke^{-r(T-t)} \quad (\epsilon > 1) \\
-\end{eqnarray*}
+Replacing in previous equations gives:
 
 \begin{equation*}
     \mathcal{P}(S,t) = \mathcal{C}(S,t) - S(t) + Ke^{-r(T-t)}
 \end{equation*}
+
+Suppose $\mathit{\Pi}(t) = \epsilon Ke^{-r(T-t)}$ with $\epsilon \neq 1$ (arbitrage).
+\begin{eqnarray*}
+    \epsilon < 1 : \quad K - \mathit{\Pi(t)}e^{r(T-t)} &=& K - (\epsilon Ke^{-r(T-t)})e^{r(T-t)} \\
+                                  &=& K(1-\epsilon)\\
+    \epsilon > 1 : \quad \mathit{\Pi}(t) - Ke^{-r(T-t)} &=& (\epsilon - 1)Ke^{-r(T-t)}\\
+\end{eqnarray*}
+
+% Eqn 5.21
+\begin{eqnarray*}
+    t = T:& \mathcal{C}(S, T) &= max\left(S(T) - K, 0 \right) \\
+    S = 0:& \mathcal{C}(0, t) &= 0 \\
+    S \xrightarrow{} \infty :& \mathcal{C}(S, t) &\xrightarrow{} 0
+\end{eqnarray*}
+
+
+\begin{eqnarray*}
+    C(S, t) &=& S N(d_1) - K e^{-r\left( T-t \right)} N(d_2) \\
+    d_1 &=& \frac{\ln \frac{S}{K} + \left( r + \frac{\sigma^2}{2} \right) \left( T - t \right)}{\sigma \sqrt{T - t}} \\
+    d_2 &=& d_1 - \sigma \sqrt{T - t} \\
+\end{eqnarray*}
